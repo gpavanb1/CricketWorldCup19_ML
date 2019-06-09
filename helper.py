@@ -57,4 +57,4 @@ def gen_pool_stage_prob(num_samples):
     team_names = [e[0] for e in prob_table]
     prob = [e[1] for e in prob_table]
     d = {'Team': team_names, 'Probability': prob}
-    return pd.DataFrame(d)
+    return pd.DataFrame(d,columns=['Team','Probability'])
