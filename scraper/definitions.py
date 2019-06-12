@@ -18,12 +18,14 @@ team_abbr['India'] = 'IND'
 
 
 # Replace team name with abbreviation
-def sanitize_team(str):
+def sanitize_team(_str):
     for i in team_abbr.keys():
-        str = str.replace(i, team_abbr[i])
-    return str
+        _str = _str.replace(i, team_abbr[i])
+    return _str
 
 
+# Returns a list-of-list containing
+# the two teams
 def tournament_data():
     # Scraping URLs
     base_url = settings.base_url
@@ -31,31 +33,38 @@ def tournament_data():
     soup = BeautifulSoup(page.text, 'lxml')
 
     # Get row in table
-    match_details_teams = soup.find_all('div',{'class':'cb-col-100'})
+    match_details_teams = soup.find_all('div', {'class': 'cb-col-100'})
     match_result = {}
 
     for i in match_details_teams:
         # Team names in match
-        mtch_dtls_team = i.find('a',{'class':'text-hvr-underline'})
-        if mtch_dtls_team:
-            if mtch_dtls_team.find('span'):
-                if i.find('a',{'class':'cb-text-complete'}):
+        match_details_team = i.find('a', {'class': 'text-hvr-underline'})
+        if match_details_team:
+            if match_details_team.find('span'):
+                if i.find('a', {'class': 'cb-text-complete'}):
                     # Winner team is taken from elapsed matches
-                    status = [str(sanitize_team(str(i.find('a',{'class':'cb-text-complete'}).\
-                             text.split(' won by')[0])))]
+                    status = [str(sanitize_team(str(i.find('a', {'class': 'cb-text-complete'}).
+                              text.split(' won by')[0])))]
                 else:
                     # Both teams are part of upcoming matches
-                    status = [i_val for i_val in str(sanitize_team(str(mtch_dtls_team.find('span')
-                             .text.split(',')[0]))).split(' vs ')]
+                    status = [i_val for i_val in str(sanitize_team(str(match_details_team.find('span')
+                              .text.split(',')[0]))).split(' vs ')]
 
-                match_result[str(mtch_dtls_team.find('span').text.split(',')[0])] = status
+                match_result[str(match_details_team.find('span').text.split(',')[0])] = status
 
     # Get list of tournament matches
     tournament_matches = []
 
-    for key,value in match_result.items():
+    for key, value in match_result.items():
         tournament_matches.append(value)
 
     # Elapsed matches are placed first
     tournament_matches.sort(key=len)
     return tournament_matches
+
+
+def tournament_odds():
+    # Scraping URLs
+    base_url = settings.base_url
+    page = requests.get(base_url)
+    soup = BeautifulSoup(page.text, 'lxml')
