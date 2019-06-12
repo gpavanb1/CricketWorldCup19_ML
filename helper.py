@@ -1,5 +1,5 @@
 from collections import defaultdict
-from scraper import definitions
+from scraper import support
 import numpy as np
 import pandas as pd
 
@@ -17,15 +17,18 @@ def gen_sample(num_matches):
 # Then, top 4 teams are chosen for semis
 # Input is provided as list of numbers, each
 # between 0 and 100 representing the random number
-def gen_semis_teams(pool_prob_list, tournament_odds, match_possibility_lol):
+def gen_semis_teams(pool_prob_list, tournament_odds, tournament_data):
     points_tbl = defaultdict(int)
     # Iterate over LoL of matches and add points
     for idx, uniform_number in enumerate(pool_prob_list):
-        winner = 0 # Either 0 or 1
+        winner = 0  # Either 0 or 1
         # Decide winner based on match odds
-        if uniform_number > tournament_odds[idx]:
+        # Compare with odds of first team
+        # to mimic odds probability when using
+        # a uniform random number generator
+        if uniform_number > tournament_odds[idx][0]:
             winner = 1
-        points_tbl[match_possibility_lol[idx][winner]] += 2
+        points_tbl[tournament_data[idx][winner]] += 2
 
     team_names = points_tbl.keys()
     team_points = points_tbl.values()
@@ -39,8 +42,8 @@ def gen_semis_teams(pool_prob_list, tournament_odds, match_possibility_lol):
 def gen_pool_stage_prob(num_samples):
     prob_table = defaultdict(float)
     total_matches = 45
-    tournament_matches = definitions.tournament_data()
-    tournament_odds = definitions.tournament_odds()
+    tournament_matches = support.tournament_data()
+    tournament_odds = support.tournament_odds()
 
     # Get number of remaining matches
     num_matches_left = 0
@@ -52,7 +55,7 @@ def gen_pool_stage_prob(num_samples):
         finished_matches = np.array([0]*(total_matches - num_matches_left))
 
         sample_list = np.concatenate((finished_matches, sample_list))
-        semis_teams = gen_semis_teams(sample_list, tournament_matches)
+        semis_teams = gen_semis_teams(sample_list, tournament_odds, tournament_matches)
         for j in semis_teams:
             prob_table[j] += 1.0/num_samples
 
@@ -64,4 +67,4 @@ def gen_pool_stage_prob(num_samples):
     team_names = [e[0] for e in prob_table]
     prob = [e[1] for e in prob_table]
     d = {'Team': team_names, 'Probability': prob}
-    return pd.DataFrame(d, columns=['Team','Probability'])
+    return pd.DataFrame(d, columns=['Team', 'Probability'])

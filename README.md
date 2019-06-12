@@ -10,7 +10,9 @@ have been applied to the Cricket World Cup
 ## Modules 
 
 * Predicting pool stage outcome using 
-Monte Carlo method
+Monte Carlo method - the prior is based 
+on the performance of teams in the last 
+10 matches against each other
 
 ## How to install and execute
 Install the requirements using `pip install -r requirements.txt`
@@ -27,16 +29,15 @@ from various modules in the repository
 +----+--------+---------------+
 |    | Team   |   Probability |
 |----+--------+---------------|
-|  0 | NZ     |     0.20895   |
-|  1 | AUS    |     0.143875  |
-|  2 | IND    |     0.135225  |
-|  3 | WI     |     0.133725  |
-|  4 | ENG    |     0.127487  |
-|  5 | SL     |     0.086925  |
-|  6 | PAK    |     0.0783875 |
-|  7 | BAN    |     0.049575  |
-|  8 | RSA    |     0.0266125 |
-|  9 | AFG    |     0.0092375 |
+|  0 | IND    |       0.9733  |
+|  1 | ENG    |       0.9353  |
+|  2 | NZ     |       0.84915 |
+|  3 | AUS    |       0.581   |
+|  4 | PAK    |       0.2947  |
+|  5 | WI     |       0.13125 |
+|  6 | RSA    |       0.0991  |
+|  7 | SL     |       0.077   |
+|  8 | BAN    |       0.0592  |
 +----+--------+---------------+
 ```
 
