@@ -21,14 +21,34 @@ def gen_semis_teams(pool_prob_list, tournament_odds, tournament_data):
     points_tbl = defaultdict(int)
     # Iterate over LoL of matches and add points
     for idx, uniform_number in enumerate(pool_prob_list):
-        winner = 0  # Either 0 or 1
-        # Decide winner based on match odds
-        # Compare with odds of first team
-        # to mimic odds probability when using
-        # a uniform random number generator
-        if uniform_number > tournament_odds[idx][0]:
-            winner = 1
-        points_tbl[tournament_data[idx][winner]] += 2
+        winner = 0  # Either 0 or 1 or 2 (no result)
+        # Check if match is no result
+        if len(tournament_data[idx]) == 3:
+            winner = 2
+        # Match has already completed
+        elif len(tournament_data[idx]) == 1:
+            winner = 0
+        else:
+            # Decide winner based on match odds
+            # Compare with odds of first team
+            # to mimic odds probability when using
+            # a uniform random number generator
+            if 0 <= uniform_number <= tournament_odds[idx][0]:
+                winner = 0
+            elif (tournament_odds[idx][0] < uniform_number
+                <= tournament_odds[idx][0] + tournament_odds[idx][1]):
+                winner = 1
+            else:
+                # No result based  on probability
+                winner = 2
+
+        # Assign points based on odds
+        # Check also if it is an NR match
+        if winner != 2:
+            points_tbl[tournament_data[idx][winner]] += 2
+        else:
+            points_tbl[tournament_data[idx][0]] += 1
+            points_tbl[tournament_data[idx][1]] += 1
 
     team_names = points_tbl.keys()
     team_points = points_tbl.values()

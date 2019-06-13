@@ -25,6 +25,9 @@ This section outlines the sample outputs
 from various modules in the repository
 
 ### Pool Stage Monte-Carlo
+
+Follow the discussion on [Reddit](https://www.reddit.com/r/Cricket/comments/bzss0o/semis_prediction_table/?utm_source=share&utm_medium=web2x)
+
 ```
 +--------+---------------+
 | Team   |   Probability |
@@ -44,5 +47,5 @@ from various modules in the repository
 ## Whom to contact?
 
 Please direct your queries to either [gpavanb1](http://github.com/gpavanb1)
-for any questions. Credits to [ABK]() 
-and [Cricbuzz](http://cricbuzz.com) for the web-scraping.
+for any questions. Credits to [ABK](), [Cricbuzz](http://cricbuzz.com) 
+and [Cricinfo](http://cricinfo.com) for the web-scraping.
